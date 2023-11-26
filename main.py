@@ -1,5 +1,6 @@
 import arcade as a
 import plants
+import time
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
@@ -38,13 +39,13 @@ class Game(a.Window):
 
         # Sprite List
         self.plants = a.SpriteList()
+        self.spawn_suns = a.SpriteList()
 
         # Fields
         self.seed = None
-
         self.lawns = []
-
         self.plant_sound = a.Sound('sounds/seed.mp3')
+        self.sun = 300
 
     def setup(self):
         pass
@@ -60,9 +61,13 @@ class Game(a.Window):
                                  height=SCREEN_HEIGHT, texture=self.bg)
         a.draw_texture_rectangle(67, SCREEN_HEIGHT / 2, 67 + 67, SCREEN_HEIGHT, self.menu)
 
+        self.spawn_suns.draw()
+
         self.plants.draw()
         if self.seed is not None:
             self.seed.draw()
+
+        a.draw_text(f'{self.sun}', 34, 490, (165, 42, 42), 30)
 
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         if 19 < x < 110:
@@ -85,15 +90,16 @@ class Game(a.Window):
         if 945 >= x >= 240 and 29 <= y <= 540 and self.seed is not None:
             center_x, column = lawn_x(x)
             center_y, row = lawn_y(y)
-            if (row, column) in self.lawns:
+            if (row, column) in self.lawns or self.sun < self.seed.cost:
                 self.seed = None
-                self.plant_sound.play(1)
                 return
             self.lawns.append((row, column))
+            self.sun -= self.seed.cost
             self.seed.planting(center_x, center_y, column, row)
             self.seed.alpha = 255
             self.plants.append(self.seed)
             self.seed = None
+            self.plant_sound.play()
         else:
             self.seed = None
 

@@ -1,5 +1,8 @@
+import time
+
 import arcade as a
 import animate
+import sun
 
 
 class Plant(animate.Animate):
@@ -26,4 +29,9 @@ class Sunflower(Plant):
         super().__init__('plants/sun1.png', 80, 50)
         self.append_texture(a.load_texture('plants/sun1.png'))
         self.append_texture(a.load_texture('plants/sun2.png'))
+        self.sun_spawn_time = time.time()
+
+    def update(self):
+        if time.time() - self.sun_spawn_time > 14:
+            new_sun = sun.Sun()
 
