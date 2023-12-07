@@ -53,6 +53,7 @@ class Game(a.Window):
     def update(self, delta_time: float):
         self.plants.update()
         self.plants.update_animation(delta_time)
+        # self.spawn_suns.update()
 
     def on_draw(self):
         self.clear((255, 255, 255))
@@ -73,7 +74,7 @@ class Game(a.Window):
         if 19 < x < 110:
             if 387 < y < 474:
                 print('sunflower')
-                self.seed = plants.Sunflower()
+                self.seed = plants.Sunflower(self)
             if 269 < y < 360:
                 print('goroshek gorohostrel')
             if 158 < y < 246:
@@ -85,6 +86,12 @@ class Game(a.Window):
             self.seed.center_x = x
             self.seed.center_y = y
             self.seed.alpha = 150
+
+        for sun in self.spawn_suns:
+            if sun.left < x < sun.right and sun.bottom < y < sun.top:
+                sun.kill()
+                self.sun += 25
+
 
     def on_mouse_release(self, x: int, y: int, button: int, modifiers: int):
         if 945 >= x >= 240 and 29 <= y <= 540 and self.seed is not None:

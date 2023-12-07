@@ -6,3 +6,6 @@ class Sun(arcade.Sprite):
         super().__init__('items/sun.png', 0.12)
         self.center_x = center_x
         self.center_y = center_y
+
+    def update(self):
+        self.angle += 1

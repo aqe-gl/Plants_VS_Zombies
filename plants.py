@@ -25,13 +25,17 @@ class Plant(animate.Animate):
 
 
 class Sunflower(Plant):
-    def __init__(self):
+    def __init__(self, window):
         super().__init__('plants/sun1.png', 80, 50)
         self.append_texture(a.load_texture('plants/sun1.png'))
         self.append_texture(a.load_texture('plants/sun2.png'))
         self.sun_spawn_time = time.time()
+        self.window = window
 
     def update(self):
         if time.time() - self.sun_spawn_time > 14:
-            new_sun = sun.Sun()
+            new_sun = sun.Sun(self.right, self.top)
+            self.sun_spawn_time = time.time()
+            self.window.spawn_suns.append(new_sun)
+        self.window.spawn_suns.update()
 
