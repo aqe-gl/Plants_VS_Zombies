@@ -3,6 +3,7 @@ import time
 import arcade as a
 import animate
 import sun
+from constants import SCREEN_WIDTH
 
 
 class Plant(animate.Animate):
@@ -38,4 +39,25 @@ class Sunflower(Plant):
             self.sun_spawn_time = time.time()
             self.window.spawn_suns.append(new_sun)
         self.window.spawn_suns.update()
+
+
+class Gorohostrel(Plant):
+    def __init__(self):
+        super().__init__('plants/pea1.png', 100, 100)
+        for i in range(1, 4):
+            self.append_texture(a.load_texture(f'plants/pea{i}.png'))
+
+
+class Pea(a.Sprite):
+    def __init__(self, center_x, center_y):
+        super().__init__('items/bul.png', 0.12)
+        self.set_position(center_x, center_y)
+        self.damage = 1
+        self.change_x = 7
+
+    def update(self):
+        self.center_x += self.change_x
+        if self.center_x > SCREEN_WIDTH:
+            self.kill()
+
 

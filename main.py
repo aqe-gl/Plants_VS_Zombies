@@ -1,12 +1,7 @@
 import arcade as a
 import plants
 import time
-
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = 'Plants VS Zombies'
-CELL_WIDTH = 78
-CELL_HEIGHT = 100
+from constants import *
 
 
 def lawn_x(x):
@@ -40,6 +35,7 @@ class Game(a.Window):
         # Sprite List
         self.plants = a.SpriteList()
         self.spawn_suns = a.SpriteList()
+        self.peas = a.SpriteList()
 
         # Fields
         self.seed = None
@@ -54,6 +50,7 @@ class Game(a.Window):
         self.plants.update()
         self.plants.update_animation(delta_time)
         # self.spawn_suns.update()
+        self.peas.update()
 
     def on_draw(self):
         self.clear((255, 255, 255))
@@ -63,6 +60,7 @@ class Game(a.Window):
         a.draw_texture_rectangle(67, SCREEN_HEIGHT / 2, 67 + 67, SCREEN_HEIGHT, self.menu)
 
         self.spawn_suns.draw()
+        self.peas.draw()
 
         self.plants.draw()
         if self.seed is not None:
@@ -77,6 +75,7 @@ class Game(a.Window):
                 self.seed = plants.Sunflower(self)
             if 269 < y < 360:
                 print('goroshek gorohostrel')
+                self.seed = plants.Gorohostrel()
             if 158 < y < 246:
                 print('kortoshichka')
             if 42 < y < 130:
