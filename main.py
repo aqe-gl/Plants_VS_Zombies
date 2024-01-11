@@ -2,6 +2,8 @@ import arcade as a
 import plants
 import time
 from constants import *
+import zombies
+import random
 
 
 def lawn_x(x):
@@ -36,12 +38,14 @@ class Game(a.Window):
         self.plants = a.SpriteList()
         self.spawn_suns = a.SpriteList()
         self.peas = a.SpriteList()
+        self.zombie_list = a.SpriteList()
 
         # Fields
         self.seed = None
         self.lawns = []
         self.plant_sound = a.Sound('sounds/seed.mp3')
         self.sun = 300
+        self.zombie_spawn_time = time.time()
 
     def setup(self):
         pass
@@ -51,6 +55,14 @@ class Game(a.Window):
         self.plants.update_animation(delta_time)
         # self.spawn_suns.update()
         self.peas.update()
+        self.zombie_list.update()
+        self.zombie_list.update_animation(delta_time)
+
+        if time.time() - self.zombie_spawn_time > ZOMBIE_SPAWN_TIME:
+            center_y, row = lawn_y(random.randint(24, 524))
+            new_zombie = zombies.Ordinary(row, center_y)
+            self.zombie_list.append(new_zombie)
+            self.zombie_spawn_time = time.time()
 
     def on_draw(self):
         self.clear((255, 255, 255))
@@ -61,8 +73,9 @@ class Game(a.Window):
 
         self.spawn_suns.draw()
         self.peas.draw()
-
+        self.zombie_list.draw()
         self.plants.draw()
+
         if self.seed is not None:
             self.seed.draw()
 
@@ -75,7 +88,7 @@ class Game(a.Window):
                 self.seed = plants.Sunflower(self)
             if 269 < y < 360:
                 print('goroshek gorohostrel')
-                self.seed = plants.Gorohostrel()
+                self.seed = plants.Gorohostrel(self)
             if 158 < y < 246:
                 print('kortoshichka')
             if 42 < y < 130:
@@ -102,6 +115,7 @@ class Game(a.Window):
             self.lawns.append((row, column))
             self.sun -= self.seed.cost
             self.seed.planting(center_x, center_y, column, row)
+            print(row)
             self.seed.alpha = 255
             self.plants.append(self.seed)
             self.seed = None
