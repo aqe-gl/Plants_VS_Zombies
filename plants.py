@@ -87,3 +87,8 @@ class Pea(a.Sprite):
             self.kill()
 
 
+class Kartoshka(Plant):
+    def __init__(self):
+        super().__init__('plants/nut1.png', 200, 50)
+
+

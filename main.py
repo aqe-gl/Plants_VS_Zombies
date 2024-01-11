@@ -91,6 +91,7 @@ class Game(a.Window):
                 self.seed = plants.Gorohostrel(self)
             if 158 < y < 246:
                 print('kortoshichka')
+                self.seed = plants.Kartoshka()
             if 42 < y < 130:
                 print('derevo zgorit')
 
